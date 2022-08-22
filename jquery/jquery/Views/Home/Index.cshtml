@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<script src="~/js/jquery.js"></script>
+
+
+
+
+<form  id="personelform">
+  <div class="form-group">
+    <label for="formGroupExampleInput">isim</label>
+    <input type="text" class="form-control" name="kisi_isim" id="formGroupExampleInput" placeholder="isim">
+  </div>
+  <div class="form-group">
+    <label for="formGroupExampleInput2"> soyisim</label>
+    <input type="text" class="form-control" name="kisi_soyad" id="formGroupExampleInput2" placeholder=" soyisim">
+  </div>
+   <div class="form-group">
+    <label for="formGroupExampleInput2"> yaş</label>
+    <input type="text" class="form-control" name="kisi_yas" id="formGroupExampleInput2" placeholder="yaş">
+  </div>
+  <br />
+
+</form>
+<button id="btngonder" type="button">gönder</button>
+<br />
+<button onclick="personelGetir()" type="button">Personel getir</button>
+<br />
+<div id="personelbilgilistele">
+</div>
+
+
+
+
+<script>
+    $("#btngonder").click(function() {
+        var personelbilgi = $("#personelform").serialize()
+        $.post("Home/PersonelEkle", personelbilgi)
+            .then(function(data) {
+                console.log(data.message)
+            })
+            .catch, (function(err) {
+                console.log(err.message)
+            })
+    })
+
+</script>
+<script>
+
+
+    function personelGetir() {
+        $.post("/Home/PersonelGetir/")
+            .then(function(model) {
+                var personelbilgilisteleContent = ""
+                model.map(function(value, index) {
+                    personelbilgilisteleContent += `
+                            <h1>${value.kisi_isim} - ${value.kisi_soyad} - ${value.kisi_yas}</h1>
+                    `
+                })
+
+                $("#personelbilgilistele").append(personelbilgilisteleContent)
+
+            })
+            .catch(function(err) {
+                console.log(err)
+            })
+    }
+
+</script>
+
